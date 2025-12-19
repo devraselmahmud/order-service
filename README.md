@@ -17,7 +17,7 @@ This project demonstrates a simple Microservices architecture using **Spring Boo
 Before running the application, you must have RabbitMQ running. We use Docker for this.
 
 ```bash
-docker run -d --name usis-rabbit -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 ```
 *   **Dashboard**: [http://localhost:15672](http://localhost:15672) (User: `guest`, Pass: `guest`)
 
@@ -40,7 +40,7 @@ The application will start on port `8080`.
     ```
 3.  **Run the Container**:
     ```bash
-    docker run -d -p 8080:8080 --name order-service --link usis-rabbit:rabbitmq -e SPRING_RABBITMQ_HOST=rabbitmq order-service
+    docker run -d -p 8080:8080 --name order-service --link rabbitmq:rabbitmq -e SPRING_RABBITMQ_HOST=rabbitmq order-service
     ```
 
 ## 🧪 Step 3: Test the API
@@ -49,12 +49,12 @@ Send a POST request to place an order. This will trigger the **Producer** to sen
 ```bash
 curl -X POST http://localhost:8080/order \
     -H "Content-Type: application/json" \
-    -d '{"name": "Pizza", "qty": 1, "price": 12.5}'
+    -d '{"name": "Pizza", "quantity": 1, "price": 12.5}'
 ```
 
 **Expected Output (Application Logs):**
 ```
-Message Received from Queue: Order(orderId=..., name=Pizza, qty=1, price=12.5)
+Message Received from Queue: Order(orderId=..., name=Pizza, quantity=1, price=12.5)
 ```
 
 ## 📂 Project Structure
